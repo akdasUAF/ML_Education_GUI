@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\mlt-backend",
+    "\\mlt-frontend",
+    "\\mlt-frontend\\public",
+    "\\mlt-frontend\\src"
+  ],
+  "SelectedNode": "\\mlt-backend\\server.py",
+  "PreviewInSolutionExplorer": false
+}
