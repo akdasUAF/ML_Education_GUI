@@ -7,7 +7,6 @@ from neural_network import *
 
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
-import json
 
 app = Flask(__name__)
 app.debug = True
@@ -25,51 +24,58 @@ def lr_removeMissingValues(id):
     rmResult = lr_rmMissingvalues(id)
     return make_response(rmResult)
 
-@app.route('/datasets/<id>/linear_regression/get_columns',methods=['POST'])
-def lr_post_columns(id):
-    # Parse the request data as JSON
-    request_data = json.loads(request.data)
-
-    # Call the lr_getColumns function
-    (X, Y_scaled) = lr_getColumns(id, request_data)
-
-    # Convert the NumPy arrays to lists and return the JSON response
-    return jsonify({'data': (X.tolist(), Y_scaled.tolist())})
-
 @app.route('/datasets/<id>/linear_regression/scatter',methods=['GET'])
 def lr_make_scatter(id):
-    x_index = request.args.get('x_index')
-    y_index = request.args.get('y_index')
-    scaleMode = request.args.get('scaleMode')
-    #data = {
-    #    'x_index': x_index,
-    #    'y_index': y_index,
-    #    'scaleMode': scaleMode
-    #}
-    scatterChart = lr_scatterImg(id, x_index, y_index, scaleMode)
+    scatterChart = lr_scatterImg(id, request.args.get('x_index'), request.args.get('y_index'), request.args.get('scaleMode'))
     return make_response(scatterChart)
 
 @app.route('/datasets/<id>/linear_regression/train_test_datasets', methods = ['GET'])
-def lr_trainTest_imgs(id, data):
-    test_size = request.args.get('test_size')
-    random_state = request.args.get('random_state')
-    
-    print(id, data, test_size, random_state)
-    charts = lr_train_test_imgs(id, data, test_size, random_state)
+def lr_trainTest_imgs(id):
+    charts = lr_train_test_imgs(id, request.args.get('test_size'), request.args.get('random_state'))
     return make_response(charts)
 
-@app.route('/datasets/<id>/<data>/linear_regression/model_training_result', methods = ['GET'])
-def lr_prediction(id, data):
-    pre_chart = lr_modelTraining(id, data, request.args.get('test_size'), request.args.get('random_state'))
+@app.route('/datasets/<id>/linear_regression/model_training_result', methods = ['GET'])
+def lr_prediction(id):
+    pre_chart = lr_modelTraining(id, request.args.get('test_size'), request.args.get('random_state'))
     return make_response(pre_chart)
 
-@app.route('/datasets/<id>/<data>/linear_regression/calculation', methods = ['GET'])
-def lr_calculations(id, data):
-    results = lr_accuracy(id, data, request.args.get('test_size'), request.args.get('random_state'))
+@app.route('/datasets/<id>/linear_regression/calculation', methods = ['GET'])
+def lr_calculations(id):
+    results = lr_accuracy(id, request.args.get('test_size'), request.args.get('random_state'))
     return make_response(results)
-
 #---------------------------------------------------------------------#
+#---------------------------------------------------------------------#
+# Polynomial Regression
+@app.route('/datasets/polynomial_regression',methods=['POST'])
+def poly_getUploadedFile():
+    (data, res) = poly_fileUpload(request.files)
+    return make_response(data, res)
 
+@app.route('/datasets/<id>/polynomial_regression/missing_values',methods=['GET'])
+def poly_removeMissingValues(id):
+    rmResult = poly_rmMissingvalues(id)
+    return make_response(rmResult)
+
+@app.route('/datasets/<id>/polynomial_regression/scatter', methods = ['GET'])
+def poly_make_scatter(id):
+    scatterChart = poly_scaling(id, request.args.get('x_index'), request.args.get('y_index'), request.args.get('scaleMode'))
+    return make_response(scatterChart)
+
+@app.route('/datasets/<id>/polynomial_regression/train_test_results', methods = ['GET'])
+def poly_traintest_imgs(id):
+    charts = poly_train_test_imgs(id, request.args.get('test_size'), request.args.get('random_state'))
+    return make_response(charts)
+
+@app.route('/datasets/<id>/polynomial_regression/model_training_result', methods = ['GET'])
+def poly_prediction(id):
+    pre_chart = poly_modelTraining(id, request.args.get('test_size'), request.args.get('random_state'))
+    return make_response(pre_chart)
+
+@app.route('/datasets/<id>/polynomial_regression/calculation', methods = ['GET'])
+def poly_calculations(id):
+    results = poly_accuracy(id, request.args.get('test_size'), request.args.get('random_state'))
+    return make_response(results)
+#---------------------------------------------------------------------#
 #---------------------------------------------------------------------#
 # Logistic Regression
 @app.route('/datasets/logistic_regression',methods=['POST'])
@@ -100,38 +106,6 @@ def lgr_getMatrix(id):
 @app.route('/datasets/<id>/logistic_regression/calculation', methods = ['GET'])
 def lgr_calculations(id):
     results = lgr_accuracy(id, request.args.get('test_size'), request.args.get('random_state'))
-    return make_response(results)
-#---------------------------------------------------------------------#
-#---------------------------------------------------------------------#
-# Polynomial Regression
-@app.route('/datasets/polynomial_regression',methods=['POST'])
-def poly_getUploadedFile():
-    (data, res) = poly_fileUpload(request.files)
-    return make_response(data, res)
-
-@app.route('/datasets/<id>/polynomial_regression/missing_values',methods=['GET'])
-def poly_removeMissingValues(id):
-    rmResult = poly_rmMissingvalues(id)
-    return make_response(rmResult)
-
-@app.route('/datasets/<id>/polynomial_regression/scatter', methods = ['GET'])
-def poly_make_scatter(id):
-    scatterChart = poly_scatterImg(id, request.args.get('scaleMode'))
-    return make_response(scatterChart)
-
-@app.route('/datasets/<id>/polynomial_regression/train_test_results', methods = ['GET'])
-def poly_traintest_imgs(id):
-    charts = poly_train_test_imgs(id, request.args.get('test_size'), request.args.get('random_state'))
-    return make_response(charts)
-
-@app.route('/datasets/<id>/polynomial_regression/model_training_result', methods = ['GET'])
-def poly_prediction(id):
-    pre_chart = poly_modelTraining(id, request.args.get('test_size'), request.args.get('random_state'))
-    return make_response(pre_chart)
-
-@app.route('/datasets/<id>/polynomial_regression/calculation', methods = ['GET'])
-def poly_calculations(id):
-    results = poly_accuracy(id, request.args.get('test_size'), request.args.get('random_state'))
     return make_response(results)
 #---------------------------------------------------------------------#
 #---------------------------------------------------------------------#

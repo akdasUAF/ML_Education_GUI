@@ -70,10 +70,10 @@
         
         <div>
             <em for="xColumn">X column: </em>
-            <input type="text" id="x_index" v-model="x_index"/>
+            <input type="text" id="x" v-model="x_index"/>
             <br />
             <em for="yColumn">Y column: </em>
-            <input type="text" id="y_index" v-model="y_index" />
+            <input type="text" id="y" v-model="y_index" />
             <br />
             <br />
             <em>Please select the scaling mode you want to use: </em>
@@ -84,13 +84,9 @@
             <br />
             <em for="scale">Enter the scaling mode you want to use: </em>
             <br />
-            <input type="scale" id="scaleMode" v-model="scaleMode"/><em> (Input "Normalization" or "Standardization" here.)</em>
+            <input type="scale" id="scaling" v-model="scaleMode"/><em> (Input "Normalization" or "Standardization" here.)</em>
             <br />
-            <button @click="submitParams">Submit</button>
-            <br />
-            <em>Click the button below to get the scatter image: </em>.
-            <br />
-            <button @click="scaling" v-if="scatterResource ==''" >Get Scatter Image</button>
+            <button @click="scaling" v-if="scatterResource ==''" >Submit</button>
 
         </div>
         
@@ -196,53 +192,43 @@
                     console.log(e)
                 }
             },
-            async submitParams() {
-                try {
-                    const data = {
-                        'x_index': this.x_index,
-                        'y_index': this.y_index,
-                        'scaleMode': this.scaleMode
-                    };
-                    const response = await axios.post(`http://localhost:5001/datasets/${localStorage.getItem('id')}/linear_regression/get_columns`, data, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    alert("X and Y columns and scale mode selected successfully!");
-                    localStorage.setItem(response.data);
-                } catch (e) {
-                    console.log(e);
-                }
-            },
+            
             async scaling(){
-                try {
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/linear_regression/scatter`, {
-                        params: {
-                            'x_index': this.x_index,
-                            'y_index': this.y_index,
-                            'scaleMode': this.scaleMode
-                        }
-                    });
-                    console.log(res.data);
-                    this.scatterResource = res.data.imgScatter;
+                let params1={}
+                if (this.x_index && this.x_index != "") {
+                    params1.x_index = this.x_index;
+                }
+                if (this.y_index && this.y_index != "") {
+                    params1.y_index = this.y_index;
+                }
+                if (this.scaleMode && this.scaleMode != "") {
+                    params1.scaleMode = this.scaleMode;
+                }
+                try{
+                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/linear_regression/scatter?`, {params: params1})
+                    alert("X and Y columns selected successfully!")
+                    console.log(res.data)
+                    this.scatterResource = res.data.imgScatter
+                    
                 } catch (e) {
-                    console.log(e);
+                    console.log(e)
                 }
             },
-            async dataPreprocess(event){
-                let params={}
-                if(event.target[0].value && event.target[0].value != ""){
-                    params.test_size=parseInt(event.target[0].value)*0.01
+            async dataPreprocess(){
+                let params2={}
+                if(this.test_size && this.test_size != ""){
+                    params2.test_size=parseInt(this.test_size)*0.01
                 }
-                if(event.target[1].value && event.target[1].value != ""){
-                    params.random_state=parseInt(event.target[1].value)
+                if(this.random_state && this.random_state != ""){
+                    params2.random_state=parseInt(this.random_state)
                 }
-                try {
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/linear_regression/train_test_datasets`, {params});
-                    console.log(res.data);
-                    event.trainTestResource = res.data.trainTestImg;
+                try{
+                    const res=await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/linear_regression/train_test_datasets`,{params: params2})
+                    console.log(res.data)
+                    this.trainTestResource = res.data.trainTestImg
+                    
                 } catch (e) {
-                    console.log(e);
+                    console.log(e)
                 }
             },
             async getPredict(){
