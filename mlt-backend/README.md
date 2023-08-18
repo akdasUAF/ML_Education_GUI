@@ -1,0 +1,3 @@
+# Backend Configuration
+## About Global Variables
+The Linear Regression model and Polynomial Regression model are using two customed global variables, respectively, for implementing data transfer in the 2nd phase. Until 8/17/2023, this is the only successful approach. Suppose there are greater scalability changes for this project in the future, it is necessary to consider replacing the global variable approach for security considerations and the need for easy code maintenance.

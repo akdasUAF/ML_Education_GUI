@@ -6,19 +6,11 @@ Backend: Python (Framework: Flask)
 
 ## Frontend Configuration
 ### User Interface (UI)
-Content for Subsection 1.1.
+Main page: Contains links to one designated CSV file and six models.
+Subpages: Each subpage contains the flow process of the corresponding model, starting from uploading the CSV file, to getting the accuracy evaluation results.
 
-### Subsection 1.2 (H3)
-Content for Subsection 1.2.
+### API Design
+All APIs are in ``mlt-backend/server.py``. Each model has its own set of APIs. Modifying the request link of the API requires modifying the asynchronous method in the vue file of the corresponding model in ``mlt-frontend`` simultaneously.
 
-## Section 2 (H2)
-### Subsection 2.1 (H3)
-Content for Subsection 2.1.
 
-#### Sub-subsection 2.1.1 (H4)
-Content for Sub-subsection 2.1.1.
 
-### Subsection 2.2 (H3)
-Content for Subsection 2.2.
-
-# Another Main Title (H1)
