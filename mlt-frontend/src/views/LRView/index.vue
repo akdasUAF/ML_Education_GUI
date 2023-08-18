@@ -136,12 +136,15 @@
         <p style="width: 80%;">The Mean Absolute Error (MAE), Mean Squared Error (MSE), and Root Mean Squared Error (RMSE) are commonly used 
             metrics for evaluating the performance of a regression model. The Mean Absolute Error (MAE) is the average absolute difference 
             between predicted and actual values.</p>
+
         <p style="width: 80%;">The Mean Squared Error (MSE) is the average squared difference between predicted and actual values. 
             The MSE measures the average magnitude of the squared errors in the predictions. Because it is squared, the MSE gives more 
             weight to larger errors, making it more useful than MAE in some cases.</p>
+
         <p style="width: 80%;">The Root Mean Squared Error (RMSE) is the square root of the MSE. The RMSE measures the standard deviation of 
             the errors in the predictions. It is typically used when we want to penalize larger errors more heavily than smaller ones and also 
             want to report the error in the same units as the target variable.</p>
+
         <em>The calculated errors from your dataset: </em>
         <button @click="getCalculation">Get Accuracy</button>
         <div v-if="showAccuracy">

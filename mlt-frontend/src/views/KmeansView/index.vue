@@ -1,6 +1,10 @@
 <template>
     <div class="KMeans">
         <h1 align=left>K Means Clustering Model</h1>
+        <h3>For the logistic regression, SVM, k-means clustering, and neural network models, please use the CSV file from the above link: </h3>
+          <a href="http://nrvis.com/data/mldata/breast-cancer-wisconsin_wdbc.csv" target="_blank">
+            <h4>breast-cancer-wisconsin_wdbc.csv (click on the link will directly download the CSV file)</h4>
+          </a>
         <br />
         <h2 align=left>Phase 1: File upload </h2>
         <div>
@@ -48,7 +52,18 @@
             </table>
             
         </div>
-
+        <h2 align=left>(2). Scaling the dataset: </h2>
+        <p style="width: 80%;">Scaling is the process of transforming the values of input data to a similar scale or range. This is often done in 
+            machine learning models to improve the algorithm's performance and ensure that no input feature has an undue 
+            influence on the results.</p>
+        <p style="width: 80%;">In many machine learning models, such as linear regression or k-nearest neighbors, the scale of input features can 
+            significantly impact the results. For example, if one feature has values much larger than the other, it may dominate 
+            the model and cause it to perform poorly. Scaling can help to mitigate this issue by bringing all features to a similar range.</p>
+        <p style="width: 80%;">Common methods for scaling data include standardization and normalization. Standardization scales the data with a 
+            mean of 0 and a standard deviation of 1, while normalization scales the data to a range between 0 and 1. 
+            Other methods, such as min-max scaling or log transformation, may be used depending on the specific requirements of the model.</p>
+        <p style="width: 80%">(In this case, we are using "breast-cancer-wisconsin_wdbc.csv", X will contain all columns from the third column (index 2) to the last column in this CSV file; 
+            y will contain the values from the second column (index 1) of this CSV file.)</p>
         <em>Please select the scaling mode you want to use: </em>
         <br />
         <em>Normalization: Y = (Y - np.min(Y)) / (np.max(Y) - np.min(Y))</em>
@@ -68,6 +83,20 @@
         <img :src="`data:image/png;base64,${scatterResource}`" v-if="scatterResource!=''"/>
 
         <h3 align=left>Phase 3: Data visualization</h3>
+        <p style="width: 80%;">This phase uses the train_test_split function to split your dataset into training and testing datasets. 
+            It is a method provided by the scikit-learn library in Python that is commonly used for splitting a dataset into training 
+            and testing subsets. This function takes in one or more arrays or matrices from your dataset. It splits them into random 
+            train and test subsets, where the data in the training subset is used for training a machine learning model, and the data 
+            in the test subset is used for evaluating the performance of the trained model.</p>
+        <p style="width: 80%;">The test_size parameter in the train_test_split function is used to specify the proportion of the dataset 
+            that should be allocated to the test set. It takes a float value between 0 and 1, and represents the fraction of the dataset 
+            that should be assigned to the test subset. For example, if test_size=0.2, 20% of the data will be used for testing and 80% 
+            for training.</p>
+        <p style="width: 80%;">The random_state parameter is used to control the randomness of the data-splitting process. It is an integer 
+            value that is used to seed the random number generator used by the train_test_split function. By setting the random_state 
+            parameter to a fixed value, we can ensure that the same random train-test split is generated every time the code is executed, 
+            which makes our results reproducible.</p>
+        <br />
         <em>Please select the parameters you want to use: </em>
         <form @submit.prevent="dataPreprocess">
             
@@ -87,6 +116,9 @@
         <img :src="`data:image/png;base64,${predictionImg}`" v-if="predictionImg !=='' " />
 
         <h3 align=left>Phase 5: Accuracy</h3>
+        <p align="width: 80%">Within-Cluster-Sum-of-Squares (WCSS) measures the sum of squared distances 
+            between each point and the centroid of its assigned cluster. Lower values of WCSS indicate better clustering performance.</p>
+        <br />
         <em>The calculated errors from your dataset: </em>
         <button @click="getCalculation">Get Accuracy</button>
         <div v-if="showAccuracy">

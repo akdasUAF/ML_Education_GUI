@@ -119,8 +119,6 @@ def km_estimate(id, random_state, scaleMode):
   # calculate distortion for a range of number of clusters
   distortions = []
   for i in range(1, 11):
-    # Update hyperparameters like n_clusters, n_init, max_iter, tol etc. following details here -
-    # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
     km = KMeans(
         n_clusters=i, init='random',
         n_init=10, max_iter=300,
