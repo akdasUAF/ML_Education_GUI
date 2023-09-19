@@ -135,6 +135,7 @@
         defineComponent
     } from 'vue'
     import axios from "axios"
+    axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL
     export default defineComponent({
         name: 'KMeansView',
         methods: {
@@ -143,7 +144,7 @@
                 const formData = new FormData()
                 formData.append('file', event.target[0].files[0])
                 try {
-                    const response = await axios.post('http://localhost:5001/datasets/k_means_clustering', formData, {
+                    const response = await axios.post(`/datasets/k_means_clustering`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -160,7 +161,7 @@
             },
             async getPreview(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/k_means_clustering/missing_values`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/k_means_clustering/missing_values`)
                     this.rmMissingValuesResult = res.data
                     this.showPreview = true
                 }catch(e){
@@ -169,7 +170,7 @@
             },
             async scaleMode(event){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/k_means_clustering/scatter?scaleMode=${event.target[0].value}`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/k_means_clustering/scatter?scaleMode=${event.target[0].value}`)
                     console.log(res.data)
                     this.scatterResource = res.data.imgScatter
                 } catch (e) {
@@ -183,7 +184,7 @@
                 }
                 
                 try{
-                    const res=await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/k_means_clustering/train_test_results`,{params})
+                    const res=await axios.get(`/datasets/${localStorage.getItem("id")}/k_means_clustering/train_test_results`,{params})
                     console.log(res.data)
                     this.trainTestResource = res.data.KMClusterImg
                     
@@ -193,7 +194,7 @@
             },
             async getPredict(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/k_means_clustering/model_training_result`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/k_means_clustering/model_training_result`)
                     console.log(res.data)
                     this.predictionImg = res.data.KMEstimateImg
                 } catch (e) {
@@ -202,7 +203,7 @@
             },
             async getCalculation(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/k_means_clustering/calculation`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/k_means_clustering/calculation`)
                     
                     this.showAccuracy = res.data
                     this.showAccuracyValue = true

@@ -159,6 +159,7 @@
         defineComponent
     } from 'vue'
     import axios from "axios"
+    axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL
     export default defineComponent({
         name: 'LGRView',
         methods: {
@@ -167,7 +168,7 @@
                 const formData = new FormData()
                 formData.append('file', event.target[0].files[0])
                 try {
-                    const response = await axios.post('http://localhost:5001/datasets/logistic_regression', formData, {
+                    const response = await axios.post('/datasets/logistic_regression', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -184,7 +185,7 @@
             },
             async getPreview(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/logistic_regression/missing_values`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/logistic_regression/missing_values`)
                     this.rmMissingValuesResult = res.data
                     this.showPreview = true
                 }catch(e){
@@ -193,7 +194,7 @@
             },
             async scaleMode(event){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/logistic_regression/get_features?scaleMode=${event.target[0].value}`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/logistic_regression/get_features?scaleMode=${event.target[0].value}`)
                     this.features = res.data
                     this.featuresValue = true
                     
@@ -210,7 +211,7 @@
                     params.random_state=parseInt(event.target[1].value)
                 }
                 try{
-                    const res=await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/logistic_regression/datasets_shapes`,{params})
+                    const res=await axios.get(`/datasets/${localStorage.getItem("id")}/logistic_regression/datasets_shapes`,{params})
                     
                     this.shapes = res.data
                     this.shapesValue = true
@@ -221,7 +222,7 @@
             },
             async getPredict(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/logistic_regression/model_training_result`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/logistic_regression/model_training_result`)
                     console.log(res.data)
                     this.trainTestResource = res.data.confsMatrix
                 } catch (e) {
@@ -230,7 +231,7 @@
             },
             async getCalculation(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/logistic_regression/calculation`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/logistic_regression/calculation`)
                     
                     this.showAccuracy = res.data
                     this.showAccuracyValue = true

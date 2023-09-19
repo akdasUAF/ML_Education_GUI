@@ -147,6 +147,7 @@
         defineComponent
     } from 'vue'
     import axios from "axios"
+    axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL
     export default defineComponent({
         name: 'SVMView',
         methods: {
@@ -155,7 +156,7 @@
                 const formData = new FormData()
                 formData.append('file', event.target[0].files[0])
                 try {
-                    const response = await axios.post('http://localhost:5001/datasets/svm', formData, {
+                    const response = await axios.post('/datasets/svm', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -172,7 +173,7 @@
             },
             async getPreview(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/svm/missing_values`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/svm/missing_values`)
                     this.rmMissingValuesResult = res.data
                     this.showPreview = true
                 }catch(e){
@@ -181,7 +182,7 @@
             },
             async scaleMode(event){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/svm/scatter?scaleMode=${event.target[0].value}`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/svm/scatter?scaleMode=${event.target[0].value}`)
                     console.log(res.data)
                     this.scatterResource = res.data.imgScatter
                     
@@ -196,7 +197,7 @@
                 }
                 
                 try{
-                    const res=await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/svm/train_test_results`,{params})
+                    const res=await axios.get(`/datasets/${localStorage.getItem("id")}/svm/train_test_results`,{params})
                     console.log(res.data)
                     this.trainTestResource = res.data.trainTestImg
                     
@@ -206,7 +207,7 @@
             },
             async getSolution(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/svm/show_solution`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/svm/show_solution`)
                     console.log(res.data)
                     this.solutionResource = res.data.solutionImg
                 } catch (e) {
@@ -215,7 +216,7 @@
             },
             async getConfMatrix(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/svm/show_confusion_matrix`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/svm/show_confusion_matrix`)
                     console.log(res.data)
                     this.confMatrixResource = res.data.confMatrix
                 } catch (e) {
@@ -224,7 +225,7 @@
             },
             async getCalculation(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/svm/calculation`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/svm/calculation`)
                     
                     this.showAccuracy = res.data
                     this.showAccuracyValue = true

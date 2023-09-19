@@ -168,6 +168,7 @@
         defineComponent
     } from 'vue'
     import axios from "axios"
+    axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL
     export default defineComponent({
         name: 'NeuralView',
         methods: {
@@ -176,7 +177,7 @@
                 const formData = new FormData()
                 formData.append('file', event.target[0].files[0])
                 try {
-                    const response = await axios.post('http://localhost:5001/datasets/neural_network', formData, {
+                    const response = await axios.post('/datasets/neural_network', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -193,7 +194,7 @@
             },
             async getPreview(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/neural_network/missing_values`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/neural_network/missing_values`)
                     this.rmMissingValuesResult = res.data
                     this.showPreview = true
                 }catch(e){
@@ -202,7 +203,7 @@
             },
             async scaleMode(event){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/neural_network/get_features?scaleMode=${event.target[0].value}`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/neural_network/get_features?scaleMode=${event.target[0].value}`)
                     this.features = res.data
                     this.featuresValue = true
                     
@@ -216,7 +217,7 @@
                     params.test_size=parseInt(event.target[0].value)*0.01
                 }
                 try{
-                    const res=await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/neural_network/datasets_shapes`,{params})
+                    const res=await axios.get(`/datasets/${localStorage.getItem("id")}/neural_network/datasets_shapes`,{params})
                     this.shapes = res.data
                     this.shapesValue = true
                     
@@ -226,7 +227,7 @@
             },
             async getPredict(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/neural_network/model_training_result`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/neural_network/model_training_result`)
                     console.log(res.data)
                     this.trainTestResource = res.data.confsMatrix
                 } catch (e) {
@@ -235,7 +236,7 @@
             },
             async getCalculation(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/neural_network/calculation`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/neural_network/calculation`)
                     
                     this.showAccuracy = res.data
                     this.showAccuracyValue = true
@@ -245,7 +246,7 @@
             },
             async getTrainErrors(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/neural_network/get_train_data_errors`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/neural_network/get_train_data_errors`)
                     
                     this.showTrainErrors = res.data
                     this.showTrainErrorsValue = true
@@ -255,7 +256,7 @@
             },
             async getTestErrors(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/neural_network/get_test_data_errors`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/neural_network/get_test_data_errors`)
                     
                     this.showTestErrors = res.data
                     this.showTestErrorsValue = true

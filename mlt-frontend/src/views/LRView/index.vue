@@ -161,7 +161,8 @@
     import {
         defineComponent
     } from 'vue'
-    import axios from "axios"
+    import axios from "axios";
+    axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL;
     export default defineComponent({
         name: 'LRView',
         
@@ -171,7 +172,7 @@
                 const formData = new FormData()
                 formData.append('file', event.target[0].files[0])
                 try {
-                    const response = await axios.post('http://localhost:5001/datasets/linear_regression', formData, {
+                    const response = await axios.post('/datasets/linear_regression', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -188,7 +189,7 @@
             },
             async getPreview(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem('id')}/linear_regression/missing_values`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem('id')}/linear_regression/missing_values`)
                     this.rmMissingValuesResult = res.data
                     this.showPreview = true
                 }catch(e){
@@ -208,7 +209,7 @@
                     params1.scaleMode = this.scaleMode;
                 }
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/linear_regression/scatter?`, {params: params1})
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/linear_regression/scatter?`, {params: params1})
                     alert("X and Y columns selected successfully!")
                     console.log(res.data)
                     this.scatterResource = res.data.imgScatter
@@ -226,7 +227,7 @@
                     params2.random_state=parseInt(this.random_state)
                 }
                 try{
-                    const res=await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/linear_regression/train_test_datasets`,{params: params2})
+                    const res=await axios.get(`/datasets/${localStorage.getItem("id")}/linear_regression/train_test_datasets`,{params: params2})
                     console.log(res.data)
                     this.trainTestResource = res.data.trainTestImg
                     
@@ -236,7 +237,7 @@
             },
             async getPredict(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/linear_regression/model_training_result`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/linear_regression/model_training_result`)
                     console.log(res.data)
                     this.predictionImg = res.data.imgPrediction
                 } catch (e) {
@@ -245,7 +246,7 @@
             },
             async getCalculation(){
                 try{
-                    const res = await axios.get(`http://localhost:5001/datasets/${localStorage.getItem("id")}/linear_regression/calculation`)
+                    const res = await axios.get(`/datasets/${localStorage.getItem("id")}/linear_regression/calculation`)
                     
                     this.showAccuracy = res.data
                     this.showAccuracyValue = true

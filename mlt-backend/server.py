@@ -5,12 +5,20 @@ from k_means_clustering import *
 from svm import *
 from neural_network import *
 
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, send_from_directory
 from flask_cors import CORS
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="dist")
 app.debug = True
 CORS(app, resources={r"/*": {"origins": "*"}})
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 #---------------------------------------------------------------------#
 # Linear Regression
